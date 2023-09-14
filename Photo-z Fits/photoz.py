@@ -6,6 +6,9 @@ import subprocess
 #Read the photometry. 
 tab = Table.read("20random_sources.dat", format='ascii.csv')
 
+#Erase the fort.90 file if it already exists.
+subprocess.call(["rm", "-f", "fort.90"])
+
 #For every source, create the lrt_model object, load the photometry, and run the photo-z fitting saving the PDF. 
 bands = ["u","g","r","i","z"]
 for i in range(len(tab)):
@@ -24,9 +27,6 @@ for i in range(len(tab)):
     min_ejy = 0.05 * obj.jy
     cond = obj.ejy < min_ejy
     obj.ejy[cond] = min_ejy[cond]
-
-    #Erase the fort.90 file if it already exists.
-    subprocess.call(["rm", "-f", "fort.90"])
 
     #This is flag we set to save the PDFs.
     obj.chi2zop = 1
